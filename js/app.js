@@ -7,9 +7,18 @@ App.Router.map(function() {
 
 App.IndexRoute = Ember.Route.extend({
   model: function() {
-    return this.store.findAll('Book');
+    return Ember.RSVP.hash({
+        books: this.store.findAll('Book'),
+        genres: this.store.findAll('genre')
+    });
+  },
+  setupController: function(controller, model) {
+    controller.set('books', model.books);
+    controller.set('genres', model.genres);
   }
 });
+
+App.IndexController = Ember.Controller.extend({});
 
 App.BookRoute = Ember.Route.extend({
     model: function(params) {

@@ -3,12 +3,13 @@ App = Ember.Application.create();
 App.Router.map(function() {
   // put your routes here
   this.resource('book', {path: '/books/:book_id'});
+  this.resource('genre', {path: '/genres/:genre_id'});
 });
 
 App.IndexRoute = Ember.Route.extend({
   model: function() {
     return Ember.RSVP.hash({
-        books: this.store.findAll('Book'),
+        books: this.store.findAll('book'),
         genres: this.store.findAll('genre')
     });
   },
@@ -28,6 +29,10 @@ App.BookRoute = Ember.Route.extend({
 
 App.BooksController = Ember.ArrayController.extend({
     sortProperties: ['title']
+});
+
+App.GenresController = Ember.ArrayController.extend({
+    sortProperties: ['name']
 });
 
 App.ApplicationAdapter = DS.FixtureAdapter.extend({
@@ -88,7 +93,7 @@ App.Book.FIXTURES = [
 
 App.Genre = DS.Model.extend({
     name: DS.attr(),
-    books: DS.hasMany('book')
+    books: DS.hasMany('book', {async: true})
 });
 
 App.Genre.FIXTURES = [
